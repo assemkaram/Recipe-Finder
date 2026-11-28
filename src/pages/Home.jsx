@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -29,16 +31,17 @@ function Home() {
       });
 
     return () => controller.abort();
-  }, [query]);
+  }, [query, retryCount]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setQuery(e.target.search.value);
   };
 
+  const handleRetry = () => setRetryCount((c) => c + 1);
+
   return (
     <div className="min-h-screen bg-[#fff8f0] font-[Lato,sans-serif] text-[#1f2937] leading-normal">
-      
       <main className="mx-auto max-w-[1260px] px-4 pb-16 pt-8">
         <form
           onSubmit={handleSubmit}
@@ -136,12 +139,12 @@ function Home() {
                             <span>{recipe.difficulty}</span>
                           </p>
 
-                          <button
-                            type="button"
-                            className="mt-auto w-full cursor-pointer rounded-full border-2 border-[#e8590c] bg-transparent px-6 py-2.5 font-bold text-[#e8590c] hover:bg-[#e8590c] hover:text-white"
+                          <Link
+                            to={`/recipes/${recipe.id}`}
+                            className="mt-auto block w-full rounded-full border-2 border-[#e8590c] px-6 py-2.5 text-center font-bold text-[#e8590c] hover:bg-[#e8590c] hover:text-white"
                           >
                             View recipe
-                          </button>
+                          </Link>
                         </div>
                       </article>
                     </li>
